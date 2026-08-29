@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jhonata Cruz | Informática & Cibersegurança</title>
+    <style>
+        /* Reset de margens e fontes globais */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0f0f0f;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* O Canvas interativo fica fixo ao fundo */
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: block;
+            z-index: 1;
+        }
+
+        /* Container de todo o conteúdo do portfólio que fica em cima do canvas */
+        .portfolio-content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Estilização da Navbar simples */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #3498db;
+            letter-spacing: 1px;
+        }
+
+        .logo span {
+            color: #9b59b6;
+        }
+
+        nav a {
+            color: #ccc;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #3498db;
+        }
+
+        /* Seção Hero (Apresentação Inicial) */
+        .hero {
+            height: 85vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .badge {
+            background: rgba(52, 152, 219, 0.15);
+            color: #3498db;
+            border: 1px solid rgba(52, 152, 219, 0.4);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            line-height: 1.1;
+            margin-bottom: 15px;
+            background: linear-gradient(45deg, #ffffff, #a5b4fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: #aaa;
+            max-width: 600px;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 12px 26px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.95rem;
+            transition: transform 0.2s, background 0.3s;
+        }
+
+        .btn-primary {
+            background: #3498db;
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #fff;
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(5px);
+        }
+
+        .btn-outline:hover {
+            background: rgba(255,255,255,0.15);
+            transform: translateY(-2px);
+        }
+
+        /* Seções padrão */
+        section {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 30px;
+            color: #fff;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 50px;
+            height: 3px;
+            background: #3498db;
+            margin-top: 8px;
+            border-radius: 2px;
+        }
+
+        /* Cards de Projetos */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            transition: border-color 0.3s, transform 0.3s;
+        }
+
+        .card:hover {
+            border-color: rgba(52, 152, 219, 0.5);
+            transform: translateY(-5px);
+        }
+
+        .card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+
+        .card p {
+            color: #888;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .tag {
+            background: rgba(255, 255, 255, 0.08);
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            color: #ddd;
+        }
+
+        .card-links a {
+            color: #3498db;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        /* Caixinha de aviso interativa no canto */
+        .content-info {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            font-size: 13px;
+            opacity: 0.85;
+            pointer-events: none;
+            z-index: 100;
+            background: rgba(0,0,0,0.8);
+            padding: 12px 18px;
+            border-radius: 8px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #ccc;
+        }
+
+        /* Rodapé */
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            color: #666;
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        /* Responsividade para Celulares */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.3rem; }
+            .hero p { font-size: 1rem; }
+            .content-info { display: none; } /* Esconde o card de instrução no mobile */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Instruções da Animação Interativa -->
+    <div class="content-info">
+        💡 Move o mouse para afastar as partículas<br>
+        🖐️ Arraste os blocos com o mouse<br>
+        📜 Role a página para alterar as cores
+    </div>
+
+    <!-- Conteúdo principal do Portfólio -->
+    <div class="portfolio-content">
+        <header>
+            <div class="logo">Jhonata<span>.Cruz</span></div>
+            <nav>
+                <a href="#sobre">Sobre</a>
+                <a href="#projetos">Projetos</a>
+                <a href="#contato">Contato</a>
+            </nav>
+        </header>
+
+        <!-- Seção de Abertura -->
+        <section class="hero">
+            <span class="badge">🔒 Estudo Informática & Cibersegurança</span>
+            <h1>Desenvolvendo soluções e explorando a segurança digital.</h1>
+            <p>Olá! Meu nome é <strong>Jhonata Cruz</strong>, tenho 16 anos e sou entusiasta de tecnologia. Focado no aprendizado de programação web, administração de sistemas e segurança da informação.</p>
+            <div class="btn-group">
+                <a href="#projetos" class="btn btn-primary">Ver Meus Projetos</a>
+                <a href="#contato" class="btn btn-outline">Entrar em Contato</a>
+            </div>
+        </section>
+
+        <!-- Seção Sobre Mim -->
+        <section id="sobre">
+            <h2 class="section-title">Sobre Mim</h2>
+            <div class="card" style="width: 100%;">
+                <p style="font-size: 1.05rem; color: #ccc;">
+                    Atualmente com 16 anos, dedico meu tempo aos estudos de <strong>Técnico em Informática</strong> e aos fundamentos de <strong>Cibersegurança (Ethical Hacking & Networking)</strong>. Gosto de entender como os sistemas funcionam "por baixo dos panos", aprendendo a proteger aplicações contra vulnerabilidades enquanto aprimoro minhas habilidades de código no Front-End e Back-End.
+                </p>
+            </div>
+        </section>
+
+        <!-- Seção de Projetos -->
+        <section id="projetos">
+            <h2 class="section-title">Projetos em Destaque</h2>
+            <div class="projects-grid">
+                
+                <!-- Projeto 1 -->
+                <div class="card">
+                    <h3>Portfólio Interativo com Física</h3>
+                    <p>Site de apresentação construído usando canvas HTML5 com p5.js e simulação de física em tempo real com Matter.js.</p>
+                    <div class="tags">
+                        <span class="tag">JavaScript</span>
+                        <span class="tag">p5.js</span>
+                        <span class="tag">Matter.js</span>
+                    </div>
+                    <div class="card-links">
+                        <a href="https://github.com" target="_blank">Ver Código no GitHub &rarr;</a>
+                    </div>
+                </div>
+
+                <!-- Projeto 2 -->
+                <div class="card">
+                    <h3>Port Scanner Simples em Python</h3>
+                    <p>Script em Python desenvolvido para verificar portas abertas em uma rede local e identificar serviços ativos.</p>
+                    <div class="tags">
+                        <span class="tag">Python</span>
+                        <span class="tag">Redes</span>
+                        <span class="tag">Security</span>
+                    </div>
+                    <div class="card-links">
+                        <a href="https://github.com" target="_blank">Ver Código no GitHub &rarr;</a>
+                    </div>
+                </div>
+
+                <!-- Projeto 3 -->
+                <div class="card">
+                    <h3>Lab de Testes & Pentest Local</h3>
+                    <p>Documentação e relatórios de vulnerabilidades encontradas em máquinas de estudo do TryHackMe e HackTheBox.</p>
+                    <div class="tags">
+                        <span class="tag">Linux</span>
+                        <span class="tag">Cybersecurity</span>
+                        <span class="tag">CTF</span>
+                    </div>
+                    <div class="card-links">
+                        <a href="https://github.com" target="_blank">Ver Relatório &rarr;</a>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Seção de Contato -->
+        <section id="contato">
+            <h2 class="section-title">Conectar & Contato</h2>
+            <div class="card">
+                <p>Estou sempre aberto a aprender coisas novas e trocar conhecimentos sobre dev e cibersegurança!</p>
+                <div class="btn-group" style="margin-top: 20px;">
+                    <a href="https://github.com" target="_blank" class="btn btn-outline">Meu GitHub</a>
+                    <a href="https://linkedin.com" target="_blank" class="btn btn-outline">Meu LinkedIn</a>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p>&copy; 2026 Jhonata Cruz. Criado com foco em código limpo e cibersegurança.</p>
+        </footer>
+    </div>
+
+    <!-- Importando as bibliotecas do Canvas -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+
+    <script>
+        // Variáveis do motor de física e dos elementos interativos
+        let engine;
+        let world;
+        let mouseConstraint;
+        let particles = [];
+        let skills = [];
+        let scrollProgress = 0;
+        let walls = [];
+
+        function setup() {
+            // Cria o fundo do p5 sem cobrir a rolagem da página
+            const canvas = createCanvas(windowWidth, windowHeight);
+            canvas.style('position', 'fixed');
+            canvas.style('top', '0');
+            canvas.style('left', '0');
+
+            // Gravidade 0 pra tudo flutuar no fundo
+            engine = Matter.Engine.create({
+                gravity: { x: 0, y: 0 } 
+            });
+            world = engine.world;
+
+            // Ativa a interação do mouse para arrastar os blocos
+            const mouse = Matter.Mouse.create(document.body);
+            mouse.pixelRatio = pixelDensity();
+
+            const mouseParams = {
+                mouse: mouse,
+                constraint: {
+                    stiffness: 0.2,
+                    angularStiffness: 0,
+                    damping: 1,
+                    limitStretch: 10
+                }
+            };
+            mouseConstraint = Matter.MouseConstraint.create(engine, mouseParams);
+            Matter.World.add(world, mouseConstraint);
+
+            // Paredes invisíveis nas bordas da tela
+            const wallThickness = 100;
+            walls = [
+                Matter.Bodies.rectangle(-wallThickness/2, height/2, wallThickness, height * 2, { isStatic: true }),
+                Matter.Bodies.rectangle(width + wallThickness/2, height/2, wallThickness, height * 2, { isStatic: true }),
+                Matter.Bodies.rectangle(width/2, -wallThickness/2, width * 2, wallThickness, { isStatic: true }),
+                Matter.Bodies.rectangle(width/2, height + wallThickness/2, width * 2, wallThickness, { isStatic: true })
+            ];
+            Matter.World.add(world, walls);
+
+            // Gerando 70 bolinhas interativas
+            const numParticles = 70;
+            for (let i = 0; i < numParticles; i++) {
+                const x = random(width * 0.1, width * 0.9);
+                const y = random(height * 0.1, height * 0.9);
+                const radius = random(8, 16); // Tamanho das partículas
+
+                const particle = Matter.Bodies.circle(x, y, radius, {
+                    mass: 0.2,
+                    frictionAir: 0.12, // Resiste bastante ao ar pra mover devagar
+                    restitution: 0.3
+                });
+                Matter.World.add(world, particle);
+                particles.push(particle);
+            }
+
+            // Blocos de habilidades com foco em Dev + Cibersegurança
+            const skillsData = [
+                { label: 'Linux 🐧', x: width * 0.2, y: height * 0.4 },
+                { label: 'CyberSec 🛡️', x: width * 0.4, y: height * 0.4 },
+                { label: 'Python 🐍', x: width * 0.6, y: height * 0.4 },
+                { label: 'Web Dev 💻', x: width * 0.8, y: height * 0.4 }
+            ];
+
+            skillsData.forEach(skillData => {
+                const body = Matter.Bodies.rectangle(skillData.x, skillData.y, 110, 45, {
+                    mass: 1,
+                    frictionAir: 0.05,
+                    restitution: 0.4
+                });
+                Matter.World.add(world, body);
+                skills.push({ body: body, label: skillData.label });
+            });
+
+            // Mede a altura do scroll
+            window.addEventListener('scroll', () => {
+                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                scrollProgress = scrollHeight > 0 ? scrollTop / scrollHeight : 0;
+            });
+        }
+
+        function draw() {
+            // Muda a cor de fundo com base no scroll da página
+            const bgColor = lerpColor(color('#0f0f0f'), color('#091428'), scrollProgress);
+            background(bgColor);
+
+            Matter.Engine.update(engine, 1000 / 60);
+
+            const mousePos = createVector(mouseX, mouseY);
+            const repelRadius = 160; 
+            const maxForce = 0.003; // Força suave de afastar
+
+            // Empurra as bolinhas para longe do cursor
+            particles.forEach(particle => {
+                const particlePos = createVector(particle.position.x, particle.position.y);
+                let force = p5.Vector.sub(particlePos, mousePos);
+                const distance = force.mag();
+
+                if (distance < repelRadius && distance > 0) {
+                    let forceMagnitude = map(distance, 0, repelRadius, maxForce, 0);
+                    force.setMag(forceMagnitude);
+                    Matter.Body.applyForce(particle, particle.position, { x: force.x, y: force.y });
+                }
+            });
+
+            // Desenha as bolinhas
+            noStroke();
+            const particleAlpha = lerp(100, 220, scrollProgress);
+            fill(255, 255, 255, particleAlpha);
+            particles.forEach(particle => {
+                ellipse(particle.position.x, particle.position.y, particle.circleRadius * 2);
+            });
+
+            // Desenha os blocos de habilidade
+            skills.forEach(skill => {
+                const pos = skill.body.position;
+                const angle = skill.body.angle;
+
+                push();
+                translate(pos.x, pos.y);
+                rotate(angle);
+                rectMode(CENTER);
+
+                const blockColor = lerpColor(color('#3498db'), color('#8e44ad'), scrollProgress);
+                fill(blockColor);
+                stroke('rgba(255,255,255,0.4)');
+                strokeWeight(1.5);
+                rect(0, 0, 110, 45, 8);
+
+                noStroke();
+                fill(255);
+                textAlign(CENTER, CENTER);
+                textSize(14);
+                textStyle(BOLD);
+                text(skill.label, 0, 0);
+                pop();
+            });
+        }
+
+        function windowResized() {
+            resizeCanvas(windowWidth, windowHeight);
+        }
+    </script>
+</body>
+</html>
