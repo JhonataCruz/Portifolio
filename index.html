@@ -5,59 +5,72 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jhonata Cruz | Informática & Cibersegurança</title>
     <link rel="shortcut icon" href="icon.png" type="image/x-icon">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+
     <style>
-        /* Variáveis de Tema (Teoria das Cores) */
         :root {
-            /* Modo Escuro (Default) */
-            --bg-color: #0f0f0f;
-            --text-color: #ffffff;
-            --text-secondary: #aaa;
+            --bg-color: #08080c;
+            --text-color: #f1f5f9;
+            --text-secondary: #94a3b8;
             --card-bg: rgba(255, 255, 255, 0.03);
             --card-border: rgba(255, 255, 255, 0.08);
-            --primary-color: #3498db;
-            --primary-hover: #2980b9;
-            --badge-bg: rgba(52, 152, 219, 0.15);
-            --badge-border: rgba(52, 152, 219, 0.4);
-            --hero-title-grad: linear-gradient(45deg, #ffffff, #a5b4fc);
-            --info-bg: rgba(0, 0, 0, 0.8);
-            --btn-toggle-bg: rgba(255, 255, 255, 0.1);
+            --primary-color: #a855f7;
+            --primary-hover: #9333ea;
+            --badge-bg: rgba(168, 85, 247, 0.12);
+            --badge-border: rgba(168, 85, 247, 0.3);
+            --hero-title-grad: linear-gradient(135deg, #ffffff 0%, #a855f7 50%, #6366f1 100%);
+            --info-bg: rgba(8, 8, 12, 0.85);
+            --btn-toggle-bg: rgba(255, 255, 255, 0.05);
+            --glow-color: rgba(168, 85, 247, 0.25);
         }
 
         [data-theme="light"] {
-            /* Modo Claro (Branco amarelado / Creme + Marrom Terra) */
             --bg-color: #faf7f2;
-            --text-color: #2c221e;
-            --text-secondary: #5c4e46;
-            --card-bg: rgba(242, 237, 228, 0.85);
-            --card-border: rgba(139, 90, 43, 0.2);
-            --primary-color: #8b5a2b;
-            --primary-hover: #6b4423;
-            --badge-bg: rgba(139, 90, 43, 0.12);
-            --badge-border: rgba(139, 90, 43, 0.35);
-            --hero-title-grad: linear-gradient(45deg, #3d2b1f, #8b5a2b);
-            --info-bg: rgba(242, 237, 228, 0.95);
-            --btn-toggle-bg: rgba(139, 90, 43, 0.15);
+            --text-color: #332c27;
+            --text-secondary: #786c62;
+            --card-bg: rgba(255, 255, 255, 0.65);
+            --card-border: rgba(166, 124, 82, 0.18);
+            --primary-color: #b47b48;
+            --primary-hover: #966235;
+            --badge-bg: rgba(180, 123, 72, 0.12);
+            --badge-border: rgba(180, 123, 72, 0.3);
+            --hero-title-grad: linear-gradient(135deg, #332c27 0%, #b47b48 100%);
+            --info-bg: rgba(250, 247, 242, 0.9);
+            --btn-toggle-bg: rgba(180, 123, 72, 0.1);
+            --glow-color: rgba(180, 123, 72, 0.15);
         }
 
-        /* Reset global e Transição Suave Universal */
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            transition: background-color 0.6s ease, color 0.6s ease, border-color 0.6s ease, box-shadow 0.6s ease;
+            transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
         }
 
         body, html {
             width: 100%;
             height: 100%;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif;
             background: var(--bg-color);
             color: var(--text-color);
             overflow-x: hidden;
             scroll-behavior: smooth;
         }
 
-        /* Canvas ao fundo */
+        #scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), #6366f1);
+            z-index: 1001;
+            width: 0%;
+            transition: width 0.1s ease-out;
+        }
+
         canvas {
             position: fixed;
             top: 0;
@@ -66,64 +79,62 @@
             z-index: 1;
         }
 
-        /* Botão de Alternância de Tema (Canto Superior Direito) */
         .theme-toggle {
             position: fixed;
-            top: 20px;
-            right: 20px;
+            top: 24px;
+            right: 24px;
             z-index: 1000;
             background: var(--btn-toggle-bg);
             border: 1px solid var(--card-border);
             color: var(--text-color);
-            padding: 10px 16px;
-            border-radius: 30px;
+            padding: 10px 18px;
+            border-radius: 99px;
             cursor: pointer;
-            font-size: 1rem;
-            font-weight: bold;
+            font-size: 0.9rem;
+            font-weight: 600;
             display: flex;
             align-items: center;
             gap: 8px;
-            backdrop-filter: blur(8px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
         }
 
         .theme-toggle:hover {
             transform: translateY(-2px);
-            background: var(--primary-color);
-            color: #fff;
+            border-color: var(--primary-color);
+            box-shadow: 0 6px 24px var(--glow-color);
         }
 
-        /* Container de conteúdo */
         .portfolio-content {
             position: relative;
             z-index: 10;
             width: 100%;
             max-width: 1100px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 0 24px;
         }
 
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 0;
+            padding: 30px 0;
         }
 
         .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
+            font-family: 'Fira Code', monospace;
+            font-size: 1.8rem;
+            font-weight: 600;
             color: var(--primary-color);
-            letter-spacing: 1px;
+            letter-spacing: -0.5px;
         }
 
         .logo span {
-            color: var(--text-secondary);
+            color: var(--text-color);
         }
 
-        /* Seção Hero */
         .hero {
-            height: 85vh;
+            min-height: 85vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -131,136 +142,211 @@
         }
 
         .badge {
+            font-family: 'Fira Code', monospace;
             background: var(--badge-bg);
             color: var(--primary-color);
             border: 1px solid var(--badge-border);
-            padding: 6px 14px;
-            border-radius: 20px;
+            padding: 8px 16px;
+            border-radius: 99px;
             font-size: 0.85rem;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .hero h1 {
-            font-size: 3.5rem;
-            line-height: 1.1;
-            margin-bottom: 15px;
+            font-size: clamp(2.3rem, 4.8vw, 3.8rem);
+            font-weight: 800;
+            line-height: 1.25;
+            margin-bottom: 20px;
+            padding-top: 4px;
+            padding-bottom: 8px; 
             background: var(--hero-title-grad);
+            background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            display: inline-block;
+            min-height: 120px; /* Evita pulos de layout enquanto digita */
+        }
+
+        /* Cursor do efeito de digitação */
+        .typing-cursor {
+            -webkit-text-fill-color: var(--primary-color);
+            animation: blink 0.8s infinite;
+            font-weight: 400;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
         }
 
         .hero p {
-            font-size: 1.2rem;
+            font-size: 1.15rem;
             color: var(--text-secondary);
-            max-width: 600px;
-            margin-bottom: 30px;
-            line-height: 1.5;
+            max-width: 620px;
+            margin-bottom: 36px;
+            line-height: 1.6;
         }
 
         .btn-group {
             display: flex;
-            gap: 15px;
+            gap: 16px;
+            flex-wrap: wrap;
         }
 
         .btn {
-            padding: 12px 26px;
-            border-radius: 8px;
+            padding: 14px 28px;
+            border-radius: 12px;
             text-decoration: none;
-            font-weight: bold;
+            font-weight: 600;
             font-size: 0.95rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .btn-primary {
             background: var(--primary-color);
-            color: #fff;
+            color: #ffffff;
+            box-shadow: 0 4px 20px var(--glow-color);
         }
 
         .btn-primary:hover {
             background: var(--primary-hover);
-            transform: translateY(-2px);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px var(--glow-color);
         }
 
         .btn-outline {
             border: 1px solid var(--card-border);
             color: var(--text-color);
             background: var(--card-bg);
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(10px);
         }
 
         .btn-outline:hover {
             border-color: var(--primary-color);
-            transform: translateY(-2px);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 15px var(--glow-color);
         }
 
-        /* Seções padrão */
         section {
-            padding: 80px 0;
+            padding: 90px 0;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .section-title {
-            font-size: 2rem;
-            margin-bottom: 30px;
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 36px;
             color: var(--text-color);
-            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
         .section-title::after {
             content: '';
-            display: block;
-            width: 50px;
-            height: 3px;
-            background: var(--primary-color);
-            margin-top: 8px;
-            border-radius: 2px;
-            transition: background 0.6s ease;
+            flex-grow: 1;
+            height: 1px;
+            background: var(--card-border);
+            margin-top: 4px;
         }
 
-        /* Cards */
-        .projects-grid {
+        .projects-grid, .certs-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
+            grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+            gap: 28px;
         }
 
         .card {
             background: var(--card-bg);
             border: 1px solid var(--card-border);
-            border-radius: 12px;
-            padding: 25px;
-            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 28px;
+            backdrop-filter: blur(16px);
+            transition: transform 0.2s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+            opacity: 0;
+            transition: opacity 0.4s ease;
         }
 
         .card:hover {
-            border-color: var(--primary-color);
-            transform: translateY(-5px);
+            border-color: rgba(168, 85, 247, 0.4);
+            box-shadow: 0 12px 30px -10px var(--glow-color);
+        }
+
+        .card:hover::before {
+            opacity: 1;
         }
 
         .card h3 {
-            font-size: 1.3rem;
-            margin-bottom: 10px;
+            font-size: 1.35rem;
+            font-weight: 700;
+            margin-bottom: 12px;
             color: var(--text-color);
         }
 
         .card p {
             color: var(--text-secondary);
             font-size: 0.95rem;
-            line-height: 1.5;
-            margin-bottom: 20px;
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        .cert-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .cert-issuer {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.8rem;
+            color: var(--primary-color);
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .cert-date {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
         }
 
         .tags {
             display: flex;
             gap: 8px;
             flex-wrap: wrap;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
         }
 
         .tag {
+            font-family: 'Fira Code', monospace;
             background: var(--badge-bg);
             border: 1px solid var(--badge-border);
             padding: 4px 10px;
-            border-radius: 4px;
+            border-radius: 6px;
             font-size: 0.75rem;
             color: var(--primary-color);
             font-weight: 600;
@@ -271,84 +357,65 @@
             text-decoration: none;
             font-size: 0.9rem;
             font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: gap 0.2s ease;
         }
 
-        /* Caixinha de aviso interativa */
-        .content-info {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            font-size: 13px;
-            opacity: 0.9;
-            pointer-events: none;
-            z-index: 100;
-            background: var(--info-bg);
-            padding: 12px 18px;
-            border-radius: 8px;
-            backdrop-filter: blur(5px);
-            border: 1px solid var(--card-border);
-            color: var(--text-secondary);
+        .card-links a:hover {
+            gap: 10px;
         }
 
-        /* Rodapé */
         footer {
             text-align: center;
-            padding: 40px 0;
+            padding: 48px 0;
             color: var(--text-secondary);
             font-size: 0.9rem;
             border-top: 1px solid var(--card-border);
+            font-family: 'Fira Code', monospace;
         }
 
         @media (max-width: 768px) {
-            .hero h1 { font-size: 2.3rem; }
-            .hero p { font-size: 1rem; }
-            .content-info { display: none; }
-            .theme-toggle { top: 15px; right: 15px; padding: 8px 12px; font-size: 0.85rem; }
+            .theme-toggle { top: 16px; right: 16px; padding: 8px 14px; font-size: 0.8rem; }
+            section { padding: 60px 0; }
+            .hero h1 { min-height: 100px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Botão de Alternância de Tema -->
+    <div id="scroll-progress"></div>
+
     <button class="theme-toggle" id="themeToggleBtn" onclick="toggleTheme()">
         <span id="themeIcon">☀️</span> <span id="themeText">Modo Claro</span>
     </button>
 
-    <!-- Instruções da Animação Interativa -->
-    <div class="content-info">
-        💡 Move o mouse para afastar as partículas<br>
-        🖐️ Arraste os blocos com o mouse<br>
-        📜 Role a página para alterar as cores
-    </div>
-
-    <!-- Conteúdo principal -->
     <div class="portfolio-content">
         <header>
             <div class="logo">Jhonata<span>.Cruz</span></div>
         </header>
 
-        <!-- Hero -->
-        <section class="hero">
-            <span class="badge">🔒 Estudo Informática & Cibersegurança</span>
-            <h1>Desenvolvendo soluções e explorando a segurança digital.</h1>
-            <p>Olá! Meu nome é <strong>Jhonata Cruz</strong>, tenho 16 anos e sou entusiasta de tecnologia. Focado no aprendizado de programação web, administração de sistemas e segurança da informação.</p>
+        <section class="hero visible">
+            <span class="badge">⚡ Estudo Informática & Cibersegurança</span>
+            <!-- H1 dinâmico via JS -->
+            <h1 id="typewriter-h1"><span id="typed-text"></span><span class="typing-cursor">|</span></h1>
+            <p>Olá! Meu nome é <strong>Jhonata Cruz</strong>, tenho 16 anos. Focado no aprendizado de programação web, administração de sistemas e segurança da informação.</p>
             <div class="btn-group">
                 <a href="#projetos" class="btn btn-primary">Ver Meus Projetos</a>
-                <a href="#contato" class="btn btn-outline">Entrar em Contato</a>
+                <a href="#certificados" class="btn btn-outline">Ver Certificados</a>
             </div>
         </section>
 
-        <!-- Sobre -->
         <section id="sobre">
             <h2 class="section-title">Sobre Mim</h2>
-            <div class="card" style="width: 100%;">
-                <p style="font-size: 1.05rem;">
+            <div class="card">
+                <p style="font-size: 1.05rem; line-height: 1.7;">
                     Atualmente com 16 anos, dedico meu tempo aos estudos de <strong>Técnico em Informática</strong> e aos fundamentos de <strong>Cibersegurança (Ethical Hacking & Networking)</strong>. Gosto de entender como os sistemas funcionam "por baixo dos panos", aprendendo a proteger aplicações contra vulnerabilidades enquanto aprimoro minhas habilidades de código no Front-End e Back-End.
                 </p>
             </div>
         </section>
 
-        <!-- Projetos -->
         <section id="projetos">
             <h2 class="section-title">Projetos em Destaque</h2>
             <div class="projects-grid">
@@ -395,14 +462,53 @@
             </div>
         </section>
 
-        <!-- Contato -->
+        <!-- Nova Seção de Certificados -->
+        <section id="certificados">
+            <h2 class="section-title">Certificações & Cursos</h2>
+            <div class="certs-grid">
+
+                <div class="card">
+                    <div class="cert-header">
+                        <span class="cert-issuer">Cisco Networking Academy</span>
+                        <span class="cert-date">Concluído</span>
+                    </div>
+                    <h3>Introduction to Cybersecurity</h3>
+                    <p>Conceitos fundamentais de segurança da informação, proteção de redes, privacidade de dados e identificação de ameaças.</p>
+                    <div class="tags">
+                        <span class="tag">Cibersegurança</span>
+                        <span class="tag">Redes</span>
+                    </div>
+                    <div class="card-links">
+                        <a href="#" target="_blank">Visualizar Credencial &rarr;</a>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="cert-header">
+                        <span class="cert-issuer">Digital Innovation One (DIO)</span>
+                        <span class="cert-date">Em Andamento</span>
+                    </div>
+                    <h3>Santander Bootcamp Cibersegurança</h3>
+                    <p>Capacitação prática cobrindo fundamentos de segurança digital, governança de TI e testes defensivos.</p>
+                    <div class="tags">
+                        <span class="tag">Ethical Hacking</span>
+                        <span class="tag">Segurança Digital</span>
+                    </div>
+                    <div class="card-links">
+                        <a href="#" target="_blank">Ver Detalhes do Curso &rarr;</a>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
         <section id="contato">
             <h2 class="section-title">Conectar & Contato</h2>
             <div class="card">
                 <p>Estou sempre aberto a aprender coisas novas e trocar conhecimentos sobre dev e cibersegurança!</p>
-                <div class="btn-group" style="margin-top: 20px;">
-                    <a href="https://github.com" target="_blank" class="btn btn-outline">Meu GitHub</a>
-                    <a href="https://linkedin.com" target="_blank" class="btn btn-outline">Meu LinkedIn</a>
+                <div class="btn-group" style="margin-top: 24px;">
+                    <a href="https://github.com" target="_blank" class="btn btn-outline">GitHub</a>
+                    <a href="https://linkedin.com" target="_blank" class="btn btn-outline">LinkedIn</a>
                 </div>
             </div>
         </section>
@@ -412,13 +518,12 @@
         </footer>
     </div>
 
-    <!-- Bibliotecas do Canvas -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
 
     <script>
         let isLightMode = false;
-        let themeLerpFactor = 0; // Controla a transição suave do Canvas (0 = Escuro, 1 = Claro)
+        let themeLerpFactor = 0;
 
         function toggleTheme() {
             isLightMode = !isLightMode;
@@ -436,13 +541,62 @@
             }
         }
 
-        let engine;
-        let world;
-        let mouseConstraint;
+        // Efeito de Digitação Automática (Typewriter) no H1
+        const fullTitleText = "Desenvolvendo soluções e explorando a segurança digital.";
+        const typedTextElement = document.getElementById("typed-text");
+        let charIndex = 0;
+
+        function typeWriter() {
+            if (charIndex < fullTitleText.length) {
+                typedTextElement.textContent += fullTitleText.charAt(charIndex);
+                charIndex++;
+                setTimeout(typeWriter, 40); // Velocidade de digitação (ms)
+            }
+        }
+
+        // Inicia a digitação ao carregar a página
+        window.addEventListener('DOMContentLoaded', typeWriter);
+
+        // Barra de Progresso de Scroll
+        window.addEventListener('scroll', () => {
+            const winScroll = document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('scroll-progress').style.width = scrolled + '%';
+        });
+
+        // Efeito Tilt 3D interativo nos Cards
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('mousemove', e => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                card.style.transform = `perspective(1000px) rotateX(${-y / 25}deg) rotateY(${x / 25}deg) translateY(-4px)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px)';
+            });
+        });
+
+        // Scroll Reveal
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('section').forEach(section => {
+            observer.observe(section);
+        });
+
+        // Canvas p5.js + Matter.js
+        let engine, world, mouseConstraint;
         let particles = [];
         let skills = [];
         let scrollProgress = 0;
-        let walls = [];
 
         function setup() {
             const canvas = createCanvas(windowWidth, windowHeight);
@@ -450,28 +604,20 @@
             canvas.style('top', '0');
             canvas.style('left', '0');
 
-            engine = Matter.Engine.create({
-                gravity: { x: 0, y: 0 } 
-            });
+            engine = Matter.Engine.create({ gravity: { x: 0, y: 0 } });
             world = engine.world;
 
             const mouse = Matter.Mouse.create(document.body);
             mouse.pixelRatio = pixelDensity();
 
-            const mouseParams = {
+            mouseConstraint = Matter.MouseConstraint.create(engine, {
                 mouse: mouse,
-                constraint: {
-                    stiffness: 0.2,
-                    angularStiffness: 0,
-                    damping: 1,
-                    limitStretch: 10
-                }
-            };
-            mouseConstraint = Matter.MouseConstraint.create(engine, mouseParams);
+                constraint: { stiffness: 0.2, damping: 1 }
+            });
             Matter.World.add(world, mouseConstraint);
 
             const wallThickness = 100;
-            walls = [
+            const walls = [
                 Matter.Bodies.rectangle(-wallThickness/2, height/2, wallThickness, height * 2, { isStatic: true }),
                 Matter.Bodies.rectangle(width + wallThickness/2, height/2, wallThickness, height * 2, { isStatic: true }),
                 Matter.Bodies.rectangle(width/2, -wallThickness/2, width * 2, wallThickness, { isStatic: true }),
@@ -479,36 +625,30 @@
             ];
             Matter.World.add(world, walls);
 
-            const numParticles = 70;
-            for (let i = 0; i < numParticles; i++) {
-                const x = random(width * 0.1, width * 0.9);
-                const y = random(height * 0.1, height * 0.9);
-                const radius = random(8, 16);
-
-                const particle = Matter.Bodies.circle(x, y, radius, {
-                    mass: 0.2,
-                    frictionAir: 0.12,
-                    restitution: 0.3
-                });
-                Matter.World.add(world, particle);
+            for (let i = 0; i < 65; i++) {
+                const particle = Matter.Bodies.circle(
+                    random(width * 0.1, width * 0.9),
+                    random(height * 0.1, height * 0.9),
+                    random(6, 12),
+                    { mass: 0.2, frictionAir: 0.1, restitution: 0.4 }
+                );
                 particles.push(particle);
+                Matter.World.add(world, particle);
             }
 
             const skillsData = [
-                { label: 'Linux 🐧', x: width * 0.2, y: height * 0.4 },
-                { label: 'CyberSec 🛡️', x: width * 0.4, y: height * 0.4 },
-                { label: 'Python 🐍', x: width * 0.6, y: height * 0.4 },
-                { label: 'Web Dev 💻', x: width * 0.8, y: height * 0.4 }
+                { label: 'Linux', x: width * 0.2, y: height * 0.35 },
+                { label: 'CyberSec', x: width * 0.4, y: height * 0.35 },
+                { label: 'Python', x: width * 0.6, y: height * 0.35 },
+                { label: 'Web Dev', x: width * 0.8, y: height * 0.35 }
             ];
 
             skillsData.forEach(skillData => {
-                const body = Matter.Bodies.rectangle(skillData.x, skillData.y, 110, 45, {
-                    mass: 1,
-                    frictionAir: 0.05,
-                    restitution: 0.4
+                const body = Matter.Bodies.rectangle(skillData.x, skillData.y, 110, 42, {
+                    mass: 0.8, frictionAir: 0.05, restitution: 0.4
                 });
-                Matter.World.add(world, body);
                 skills.push({ body: body, label: skillData.label });
+                Matter.World.add(world, body);
             });
 
             window.addEventListener('scroll', () => {
@@ -519,87 +659,82 @@
         }
 
         function draw() {
-            // Interpolação gradual entre os temas (efeito de transição no Canvas)
             let targetFactor = isLightMode ? 1 : 0;
             themeLerpFactor = lerp(themeLerpFactor, targetFactor, 0.05);
 
-            // Cores base escuras vs claras
-            let darkBgStart = color('#0f0f0f');
-            let darkBgEnd = color('#091428');
+            let darkBgStart = color('#08080c');
+            let darkBgEnd = color('#120a1c');
             let lightBgStart = color('#faf7f2');
-            let lightBgEnd = color('#eee4d5');
+            let lightBgEnd = color('#f0e6d8');
 
             let currentBgStart = lerpColor(darkBgStart, lightBgStart, themeLerpFactor);
             let currentBgEnd = lerpColor(darkBgEnd, lightBgEnd, themeLerpFactor);
 
-            const bgColor = lerpColor(currentBgStart, currentBgEnd, scrollProgress);
-            background(bgColor);
+            background(lerpColor(currentBgStart, currentBgEnd, scrollProgress));
 
             Matter.Engine.update(engine, 1000 / 60);
 
             const mousePos = createVector(mouseX, mouseY);
-            const repelRadius = 160; 
+            const repelRadius = 160;
             const maxForce = 0.003;
 
-            particles.forEach(particle => {
-                const particlePos = createVector(particle.position.x, particle.position.y);
-                let force = p5.Vector.sub(particlePos, mousePos);
-                const distance = force.mag();
+            particles.forEach(p => {
+                const pPos = createVector(p.position.x, p.position.y);
+                let force = p5.Vector.sub(pPos, mousePos);
+                const d = force.mag();
 
-                if (distance < repelRadius && distance > 0) {
-                    let forceMagnitude = map(distance, 0, repelRadius, maxForce, 0);
-                    force.setMag(forceMagnitude);
-                    Matter.Body.applyForce(particle, particle.position, { x: force.x, y: force.y });
+                if (d < repelRadius && d > 0) {
+                    force.setMag(map(d, 0, repelRadius, maxForce, 0));
+                    Matter.Body.applyForce(p, p.position, { x: force.x, y: force.y });
                 }
             });
 
-            // Partículas com cor suave
-            noStroke();
-            let darkParticleColor = color(255, 255, 255);
-            let lightParticleColor = color(139, 90, 43);
-            let pColor = lerpColor(darkParticleColor, lightParticleColor, themeLerpFactor);
-            
-            const minAlpha = lerp(100, 40, themeLerpFactor);
-            const maxAlpha = lerp(220, 140, themeLerpFactor);
-            const particleAlpha = lerp(minAlpha, maxAlpha, scrollProgress);
-            pColor.setAlpha(particleAlpha);
-            fill(pColor);
+            let lineColor = isLightMode ? color(180, 123, 72, 25) : color(168, 85, 247, 30);
+            stroke(lineColor);
+            strokeWeight(1);
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    let d = dist(
+                        particles[i].position.x, particles[i].position.y,
+                        particles[j].position.x, particles[j].position.y
+                    );
+                    if (d < 110) {
+                        line(
+                            particles[i].position.x, particles[i].position.y,
+                            particles[j].position.x, particles[j].position.y
+                        );
+                    }
+                }
+            }
 
-            particles.forEach(particle => {
-                ellipse(particle.position.x, particle.position.y, particle.circleRadius * 2);
+            noStroke();
+            let pColor = lerpColor(color(255, 255, 255, 160), color(120, 108, 98, 140), themeLerpFactor);
+            fill(pColor);
+            particles.forEach(p => {
+                ellipse(p.position.x, p.position.y, p.circleRadius * 2);
             });
 
-            // Blocos de habilidades com transição de cor
-            let darkBlockStart = color('#3498db');
-            let darkBlockEnd = color('#8e44ad');
-            let lightBlockStart = color('#8b5a2b');
-            let lightBlockEnd = color('#5c3a1b');
-
-            let currentBlockStart = lerpColor(darkBlockStart, lightBlockStart, themeLerpFactor);
-            let currentBlockEnd = lerpColor(darkBlockEnd, lightBlockEnd, themeLerpFactor);
+            let darkBlock = color('#a855f7');
+            let lightBlock = color('#b47b48');
+            let currentBlockColor = lerpColor(darkBlock, lightBlock, themeLerpFactor);
 
             skills.forEach(skill => {
                 const pos = skill.body.position;
-                const angle = skill.body.angle;
-
                 push();
                 translate(pos.x, pos.y);
-                rotate(angle);
+                rotate(skill.body.angle);
                 rectMode(CENTER);
 
-                const blockColor = lerpColor(currentBlockStart, currentBlockEnd, scrollProgress);
-                fill(blockColor);
-                
-                let darkStroke = color(255, 255, 255, 100);
-                let lightStroke = color(139, 90, 43, 80);
-                stroke(lerpColor(darkStroke, lightStroke, themeLerpFactor));
-                strokeWeight(1.5);
-                rect(0, 0, 110, 45, 8);
+                fill(currentBlockColor);
+                stroke(255, 255, 255, 80);
+                strokeWeight(1);
+                rect(0, 0, 110, 42, 8);
 
                 noStroke();
                 fill(255);
                 textAlign(CENTER, CENTER);
-                textSize(14);
+                textSize(13);
+                textFont('Fira Code');
                 textStyle(BOLD);
                 text(skill.label, 0, 0);
                 pop();
