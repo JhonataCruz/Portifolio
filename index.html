@@ -4,25 +4,60 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jhonata Cruz | Informática & Cibersegurança</title>
+    <link rel="shortcut icon" href="icon.png" type="image/x-icon">
     <style>
-        /* Reset de margens e fontes globais */
+        /* Variáveis de Tema (Teoria das Cores) */
+        :root {
+            /* Modo Escuro (Default) */
+            --bg-color: #0f0f0f;
+            --text-color: #ffffff;
+            --text-secondary: #aaa;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --primary-color: #3498db;
+            --primary-hover: #2980b9;
+            --badge-bg: rgba(52, 152, 219, 0.15);
+            --badge-border: rgba(52, 152, 219, 0.4);
+            --hero-title-grad: linear-gradient(45deg, #ffffff, #a5b4fc);
+            --info-bg: rgba(0, 0, 0, 0.8);
+            --btn-toggle-bg: rgba(255, 255, 255, 0.1);
+        }
+
+        [data-theme="light"] {
+            /* Modo Claro (Branco amarelado / Creme + Marrom Terra) */
+            --bg-color: #faf7f2;
+            --text-color: #2c221e;
+            --text-secondary: #5c4e46;
+            --card-bg: rgba(242, 237, 228, 0.85);
+            --card-border: rgba(139, 90, 43, 0.2);
+            --primary-color: #8b5a2b;
+            --primary-hover: #6b4423;
+            --badge-bg: rgba(139, 90, 43, 0.12);
+            --badge-border: rgba(139, 90, 43, 0.35);
+            --hero-title-grad: linear-gradient(45deg, #3d2b1f, #8b5a2b);
+            --info-bg: rgba(242, 237, 228, 0.95);
+            --btn-toggle-bg: rgba(139, 90, 43, 0.15);
+        }
+
+        /* Reset global e Transição Suave Universal */
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
+            transition: background-color 0.6s ease, color 0.6s ease, border-color 0.6s ease, box-shadow 0.6s ease;
         }
 
         body, html {
             width: 100%;
             height: 100%;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #0f0f0f;
-            color: #fff;
+            background: var(--bg-color);
+            color: var(--text-color);
             overflow-x: hidden;
             scroll-behavior: smooth;
         }
 
-        /* O Canvas interativo fica fixo ao fundo */
+        /* Canvas ao fundo */
         canvas {
             position: fixed;
             top: 0;
@@ -31,7 +66,34 @@
             z-index: 1;
         }
 
-        /* Container de todo o conteúdo do portfólio que fica em cima do canvas */
+        /* Botão de Alternância de Tema (Canto Superior Direito) */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: var(--btn-toggle-bg);
+            border: 1px solid var(--card-border);
+            color: var(--text-color);
+            padding: 10px 16px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .theme-toggle:hover {
+            transform: translateY(-2px);
+            background: var(--primary-color);
+            color: #fff;
+        }
+
+        /* Container de conteúdo */
         .portfolio-content {
             position: relative;
             z-index: 10;
@@ -41,7 +103,6 @@
             padding: 20px;
         }
 
-        /* Estilização da Navbar simples */
         header {
             display: flex;
             justify-content: space-between;
@@ -52,27 +113,15 @@
         .logo {
             font-size: 1.5rem;
             font-weight: bold;
-            color: #3498db;
+            color: var(--primary-color);
             letter-spacing: 1px;
         }
 
         .logo span {
-            color: #9b59b6;
+            color: var(--text-secondary);
         }
 
-        nav a {
-            color: #ccc;
-            text-decoration: none;
-            margin-left: 20px;
-            font-size: 0.95rem;
-            transition: color 0.3s;
-        }
-
-        nav a:hover {
-            color: #3498db;
-        }
-
-        /* Seção Hero (Apresentação Inicial) */
+        /* Seção Hero */
         .hero {
             height: 85vh;
             display: flex;
@@ -82,9 +131,9 @@
         }
 
         .badge {
-            background: rgba(52, 152, 219, 0.15);
-            color: #3498db;
-            border: 1px solid rgba(52, 152, 219, 0.4);
+            background: var(--badge-bg);
+            color: var(--primary-color);
+            border: 1px solid var(--badge-border);
             padding: 6px 14px;
             border-radius: 20px;
             font-size: 0.85rem;
@@ -96,14 +145,14 @@
             font-size: 3.5rem;
             line-height: 1.1;
             margin-bottom: 15px;
-            background: linear-gradient(45deg, #ffffff, #a5b4fc);
+            background: var(--hero-title-grad);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
         .hero p {
             font-size: 1.2rem;
-            color: #aaa;
+            color: var(--text-secondary);
             max-width: 600px;
             margin-bottom: 30px;
             line-height: 1.5;
@@ -120,28 +169,27 @@
             text-decoration: none;
             font-weight: bold;
             font-size: 0.95rem;
-            transition: transform 0.2s, background 0.3s;
         }
 
         .btn-primary {
-            background: #3498db;
+            background: var(--primary-color);
             color: #fff;
         }
 
         .btn-primary:hover {
-            background: #2980b9;
+            background: var(--primary-hover);
             transform: translateY(-2px);
         }
 
         .btn-outline {
-            border: 1px solid rgba(255,255,255,0.2);
-            color: #fff;
-            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--card-border);
+            color: var(--text-color);
+            background: var(--card-bg);
             backdrop-filter: blur(5px);
         }
 
         .btn-outline:hover {
-            background: rgba(255,255,255,0.15);
+            border-color: var(--primary-color);
             transform: translateY(-2px);
         }
 
@@ -153,7 +201,7 @@
         .section-title {
             font-size: 2rem;
             margin-bottom: 30px;
-            color: #fff;
+            color: var(--text-color);
             position: relative;
         }
 
@@ -162,12 +210,13 @@
             display: block;
             width: 50px;
             height: 3px;
-            background: #3498db;
+            background: var(--primary-color);
             margin-top: 8px;
             border-radius: 2px;
+            transition: background 0.6s ease;
         }
 
-        /* Cards de Projetos */
+        /* Cards */
         .projects-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -175,27 +224,26 @@
         }
 
         .card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
             border-radius: 12px;
             padding: 25px;
             backdrop-filter: blur(10px);
-            transition: border-color 0.3s, transform 0.3s;
         }
 
         .card:hover {
-            border-color: rgba(52, 152, 219, 0.5);
+            border-color: var(--primary-color);
             transform: translateY(-5px);
         }
 
         .card h3 {
             font-size: 1.3rem;
             margin-bottom: 10px;
-            color: #fff;
+            color: var(--text-color);
         }
 
         .card p {
-            color: #888;
+            color: var(--text-secondary);
             font-size: 0.95rem;
             line-height: 1.5;
             margin-bottom: 20px;
@@ -209,55 +257,62 @@
         }
 
         .tag {
-            background: rgba(255, 255, 255, 0.08);
+            background: var(--badge-bg);
+            border: 1px solid var(--badge-border);
             padding: 4px 10px;
             border-radius: 4px;
             font-size: 0.75rem;
-            color: #ddd;
+            color: var(--primary-color);
+            font-weight: 600;
         }
 
         .card-links a {
-            color: #3498db;
+            color: var(--primary-color);
             text-decoration: none;
             font-size: 0.9rem;
             font-weight: 600;
         }
 
-        /* Caixinha de aviso interativa no canto */
+        /* Caixinha de aviso interativa */
         .content-info {
             position: fixed;
             bottom: 20px;
             right: 20px;
             font-size: 13px;
-            opacity: 0.85;
+            opacity: 0.9;
             pointer-events: none;
             z-index: 100;
-            background: rgba(0,0,0,0.8);
+            background: var(--info-bg);
             padding: 12px 18px;
             border-radius: 8px;
             backdrop-filter: blur(5px);
-            border: 1px solid rgba(255,255,255,0.1);
-            color: #ccc;
+            border: 1px solid var(--card-border);
+            color: var(--text-secondary);
         }
 
         /* Rodapé */
         footer {
             text-align: center;
             padding: 40px 0;
-            color: #666;
+            color: var(--text-secondary);
             font-size: 0.9rem;
-            border-top: 1px solid rgba(255,255,255,0.05);
+            border-top: 1px solid var(--card-border);
         }
 
-        /* Responsividade para Celulares */
         @media (max-width: 768px) {
             .hero h1 { font-size: 2.3rem; }
             .hero p { font-size: 1rem; }
-            .content-info { display: none; } /* Esconde o card de instrução no mobile */
+            .content-info { display: none; }
+            .theme-toggle { top: 15px; right: 15px; padding: 8px 12px; font-size: 0.85rem; }
         }
     </style>
 </head>
 <body>
+
+    <!-- Botão de Alternância de Tema -->
+    <button class="theme-toggle" id="themeToggleBtn" onclick="toggleTheme()">
+        <span id="themeIcon">☀️</span> <span id="themeText">Modo Claro</span>
+    </button>
 
     <!-- Instruções da Animação Interativa -->
     <div class="content-info">
@@ -266,18 +321,13 @@
         📜 Role a página para alterar as cores
     </div>
 
-    <!-- Conteúdo principal do Portfólio -->
+    <!-- Conteúdo principal -->
     <div class="portfolio-content">
         <header>
             <div class="logo">Jhonata<span>.Cruz</span></div>
-            <nav>
-                <a href="#sobre">Sobre</a>
-                <a href="#projetos">Projetos</a>
-                <a href="#contato">Contato</a>
-            </nav>
         </header>
 
-        <!-- Seção de Abertura -->
+        <!-- Hero -->
         <section class="hero">
             <span class="badge">🔒 Estudo Informática & Cibersegurança</span>
             <h1>Desenvolvendo soluções e explorando a segurança digital.</h1>
@@ -288,22 +338,21 @@
             </div>
         </section>
 
-        <!-- Seção Sobre Mim -->
+        <!-- Sobre -->
         <section id="sobre">
             <h2 class="section-title">Sobre Mim</h2>
             <div class="card" style="width: 100%;">
-                <p style="font-size: 1.05rem; color: #ccc;">
+                <p style="font-size: 1.05rem;">
                     Atualmente com 16 anos, dedico meu tempo aos estudos de <strong>Técnico em Informática</strong> e aos fundamentos de <strong>Cibersegurança (Ethical Hacking & Networking)</strong>. Gosto de entender como os sistemas funcionam "por baixo dos panos", aprendendo a proteger aplicações contra vulnerabilidades enquanto aprimoro minhas habilidades de código no Front-End e Back-End.
                 </p>
             </div>
         </section>
 
-        <!-- Seção de Projetos -->
+        <!-- Projetos -->
         <section id="projetos">
             <h2 class="section-title">Projetos em Destaque</h2>
             <div class="projects-grid">
                 
-                <!-- Projeto 1 -->
                 <div class="card">
                     <h3>Portfólio Interativo com Física</h3>
                     <p>Site de apresentação construído usando canvas HTML5 com p5.js e simulação de física em tempo real com Matter.js.</p>
@@ -317,7 +366,6 @@
                     </div>
                 </div>
 
-                <!-- Projeto 2 -->
                 <div class="card">
                     <h3>Port Scanner Simples em Python</h3>
                     <p>Script em Python desenvolvido para verificar portas abertas em uma rede local e identificar serviços ativos.</p>
@@ -331,7 +379,6 @@
                     </div>
                 </div>
 
-                <!-- Projeto 3 -->
                 <div class="card">
                     <h3>Lab de Testes & Pentest Local</h3>
                     <p>Documentação e relatórios de vulnerabilidades encontradas em máquinas de estudo do TryHackMe e HackTheBox.</p>
@@ -348,7 +395,7 @@
             </div>
         </section>
 
-        <!-- Seção de Contato -->
+        <!-- Contato -->
         <section id="contato">
             <h2 class="section-title">Conectar & Contato</h2>
             <div class="card">
@@ -365,12 +412,30 @@
         </footer>
     </div>
 
-    <!-- Importando as bibliotecas do Canvas -->
+    <!-- Bibliotecas do Canvas -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
 
     <script>
-        // Variáveis do motor de física e dos elementos interativos
+        let isLightMode = false;
+        let themeLerpFactor = 0; // Controla a transição suave do Canvas (0 = Escuro, 1 = Claro)
+
+        function toggleTheme() {
+            isLightMode = !isLightMode;
+            document.documentElement.setAttribute('data-theme', isLightMode ? 'light' : 'dark');
+            
+            const icon = document.getElementById('themeIcon');
+            const text = document.getElementById('themeText');
+            
+            if (isLightMode) {
+                icon.textContent = '🌙';
+                text.textContent = 'Modo Escuro';
+            } else {
+                icon.textContent = '☀️';
+                text.textContent = 'Modo Claro';
+            }
+        }
+
         let engine;
         let world;
         let mouseConstraint;
@@ -380,19 +445,16 @@
         let walls = [];
 
         function setup() {
-            // Cria o fundo do p5 sem cobrir a rolagem da página
             const canvas = createCanvas(windowWidth, windowHeight);
             canvas.style('position', 'fixed');
             canvas.style('top', '0');
             canvas.style('left', '0');
 
-            // Gravidade 0 pra tudo flutuar no fundo
             engine = Matter.Engine.create({
                 gravity: { x: 0, y: 0 } 
             });
             world = engine.world;
 
-            // Ativa a interação do mouse para arrastar os blocos
             const mouse = Matter.Mouse.create(document.body);
             mouse.pixelRatio = pixelDensity();
 
@@ -408,7 +470,6 @@
             mouseConstraint = Matter.MouseConstraint.create(engine, mouseParams);
             Matter.World.add(world, mouseConstraint);
 
-            // Paredes invisíveis nas bordas da tela
             const wallThickness = 100;
             walls = [
                 Matter.Bodies.rectangle(-wallThickness/2, height/2, wallThickness, height * 2, { isStatic: true }),
@@ -418,23 +479,21 @@
             ];
             Matter.World.add(world, walls);
 
-            // Gerando 70 bolinhas interativas
             const numParticles = 70;
             for (let i = 0; i < numParticles; i++) {
                 const x = random(width * 0.1, width * 0.9);
                 const y = random(height * 0.1, height * 0.9);
-                const radius = random(8, 16); // Tamanho das partículas
+                const radius = random(8, 16);
 
                 const particle = Matter.Bodies.circle(x, y, radius, {
                     mass: 0.2,
-                    frictionAir: 0.12, // Resiste bastante ao ar pra mover devagar
+                    frictionAir: 0.12,
                     restitution: 0.3
                 });
                 Matter.World.add(world, particle);
                 particles.push(particle);
             }
 
-            // Blocos de habilidades com foco em Dev + Cibersegurança
             const skillsData = [
                 { label: 'Linux 🐧', x: width * 0.2, y: height * 0.4 },
                 { label: 'CyberSec 🛡️', x: width * 0.4, y: height * 0.4 },
@@ -452,7 +511,6 @@
                 skills.push({ body: body, label: skillData.label });
             });
 
-            // Mede a altura do scroll
             window.addEventListener('scroll', () => {
                 const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
                 const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
@@ -461,17 +519,28 @@
         }
 
         function draw() {
-            // Muda a cor de fundo com base no scroll da página
-            const bgColor = lerpColor(color('#0f0f0f'), color('#091428'), scrollProgress);
+            // Interpolação gradual entre os temas (efeito de transição no Canvas)
+            let targetFactor = isLightMode ? 1 : 0;
+            themeLerpFactor = lerp(themeLerpFactor, targetFactor, 0.05);
+
+            // Cores base escuras vs claras
+            let darkBgStart = color('#0f0f0f');
+            let darkBgEnd = color('#091428');
+            let lightBgStart = color('#faf7f2');
+            let lightBgEnd = color('#eee4d5');
+
+            let currentBgStart = lerpColor(darkBgStart, lightBgStart, themeLerpFactor);
+            let currentBgEnd = lerpColor(darkBgEnd, lightBgEnd, themeLerpFactor);
+
+            const bgColor = lerpColor(currentBgStart, currentBgEnd, scrollProgress);
             background(bgColor);
 
             Matter.Engine.update(engine, 1000 / 60);
 
             const mousePos = createVector(mouseX, mouseY);
             const repelRadius = 160; 
-            const maxForce = 0.003; // Força suave de afastar
+            const maxForce = 0.003;
 
-            // Empurra as bolinhas para longe do cursor
             particles.forEach(particle => {
                 const particlePos = createVector(particle.position.x, particle.position.y);
                 let force = p5.Vector.sub(particlePos, mousePos);
@@ -484,15 +553,31 @@
                 }
             });
 
-            // Desenha as bolinhas
+            // Partículas com cor suave
             noStroke();
-            const particleAlpha = lerp(100, 220, scrollProgress);
-            fill(255, 255, 255, particleAlpha);
+            let darkParticleColor = color(255, 255, 255);
+            let lightParticleColor = color(139, 90, 43);
+            let pColor = lerpColor(darkParticleColor, lightParticleColor, themeLerpFactor);
+            
+            const minAlpha = lerp(100, 40, themeLerpFactor);
+            const maxAlpha = lerp(220, 140, themeLerpFactor);
+            const particleAlpha = lerp(minAlpha, maxAlpha, scrollProgress);
+            pColor.setAlpha(particleAlpha);
+            fill(pColor);
+
             particles.forEach(particle => {
                 ellipse(particle.position.x, particle.position.y, particle.circleRadius * 2);
             });
 
-            // Desenha os blocos de habilidade
+            // Blocos de habilidades com transição de cor
+            let darkBlockStart = color('#3498db');
+            let darkBlockEnd = color('#8e44ad');
+            let lightBlockStart = color('#8b5a2b');
+            let lightBlockEnd = color('#5c3a1b');
+
+            let currentBlockStart = lerpColor(darkBlockStart, lightBlockStart, themeLerpFactor);
+            let currentBlockEnd = lerpColor(darkBlockEnd, lightBlockEnd, themeLerpFactor);
+
             skills.forEach(skill => {
                 const pos = skill.body.position;
                 const angle = skill.body.angle;
@@ -502,9 +587,12 @@
                 rotate(angle);
                 rectMode(CENTER);
 
-                const blockColor = lerpColor(color('#3498db'), color('#8e44ad'), scrollProgress);
+                const blockColor = lerpColor(currentBlockStart, currentBlockEnd, scrollProgress);
                 fill(blockColor);
-                stroke('rgba(255,255,255,0.4)');
+                
+                let darkStroke = color(255, 255, 255, 100);
+                let lightStroke = color(139, 90, 43, 80);
+                stroke(lerpColor(darkStroke, lightStroke, themeLerpFactor));
                 strokeWeight(1.5);
                 rect(0, 0, 110, 45, 8);
 
