@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jhonata Cruz | Informática & Cibersegurança</title>
-    <link rel="shortcut icon" href="icon.png" type="image/x-icon">
+    <link rel="shortcut icon" href="svg/icon.png" type="image/x-icon">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -60,6 +60,10 @@
             scroll-behavior: smooth;
         }
 
+        body.loading {
+            overflow: hidden;
+        }
+
         #scroll-progress {
             position: fixed;
             top: 0;
@@ -97,6 +101,14 @@
             gap: 8px;
             backdrop-filter: blur(12px);
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.8s ease, transform 0.4s ease;
+        }
+
+        .theme-toggle.visible {
+            opacity: 1;
+            pointer-events: all;
         }
 
         .theme-toggle:hover {
@@ -112,6 +124,16 @@
             max-width: 1100px;
             margin: 0 auto;
             padding: 0 24px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
+        }
+
+        body.site-revealed .portfolio-content {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: all;
         }
 
         header {
@@ -136,9 +158,42 @@
         .hero {
             min-height: 85vh;
             display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            gap: 40px;
+        }
+
+        .hero-text {
+            flex: 1;
+            display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: flex-start;
+        }
+
+        .hero-avatar {
+            flex-shrink: 0;
+            position: relative;
+            width: 280px;
+            height: 280px;
+            border-radius: 50%;
+            padding: 5px;
+            background: linear-gradient(135deg, var(--primary-color), rgba(99, 102, 241, 0.3));
+            box-shadow: 0 10px 30px var(--glow-color);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+        }
+
+        .hero-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            display: block;
+        }
+
+        .hero-avatar:hover {
+            transform: scale(1.05) rotate(2deg);
+            box-shadow: 0 15px 40px var(--glow-color), 0 0 25px var(--primary-color);
         }
 
         .badge {
@@ -157,25 +212,40 @@
         }
 
         .hero h1 {
-            font-size: clamp(2.3rem, 4.8vw, 3.8rem);
+            font-size: clamp(2.5rem, 5vw, 4rem);
             font-weight: 800;
-            line-height: 1.25;
-            margin-bottom: 20px;
-            padding-top: 4px;
-            padding-bottom: 8px; 
+            line-height: 1.1;
+            margin-bottom: 8px;
             background: var(--hero-title-grad);
             background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            display: inline-block;
-            min-height: 120px; /* Evita pulos de layout enquanto digita */
+            display: inline-flex;
+            align-items: baseline;
+            gap: 0.35em;
         }
 
-        /* Cursor do efeito de digitação */
+        #im-anchor {
+            display: inline-block;
+        }
+
+        .hero-subtitle {
+            font-family: 'Fira Code', monospace;
+            font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 24px;
+            min-height: 40px;
+            display: flex;
+            align-items: center;
+        }
+
         .typing-cursor {
+            color: var(--primary-color);
             -webkit-text-fill-color: var(--primary-color);
             animation: blink 0.8s infinite;
             font-weight: 400;
+            margin-left: 2px;
         }
 
         @keyframes blink {
@@ -233,14 +303,6 @@
 
         section {
             padding: 90px 0;
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.8s ease, transform 0.8s ease;
-        }
-
-        section.visible {
-            opacity: 1;
-            transform: translateY(0);
         }
 
         .section-title {
@@ -379,11 +441,27 @@
         @media (max-width: 768px) {
             .theme-toggle { top: 16px; right: 16px; padding: 8px 14px; font-size: 0.8rem; }
             section { padding: 60px 0; }
-            .hero h1 { min-height: 100px; }
+
+            .hero {
+                flex-direction: column-reverse;
+                text-align: center;
+                justify-content: center;
+                gap: 30px;
+                padding-top: 40px;
+            }
+
+            .hero-text {
+                align-items: center;
+            }
+
+            .hero-avatar {
+                width: 200px;
+                height: 200px;
+            }
         }
     </style>
 </head>
-<body>
+<body class="loading">
 
     <div id="scroll-progress"></div>
 
@@ -391,19 +469,34 @@
         <span id="themeIcon">☀️</span> <span id="themeText">Modo Claro</span>
     </button>
 
-    <div class="portfolio-content">
+    <div class="portfolio-content" id="portfolioContent">
         <header>
             <div class="logo">Jhonata<span>.Cruz</span></div>
         </header>
 
-        <section class="hero visible">
-            <span class="badge">⚡ Estudo Informática & Cibersegurança</span>
-            <!-- H1 dinâmico via JS -->
-            <h1 id="typewriter-h1"><span id="typed-text"></span><span class="typing-cursor">|</span></h1>
-            <p>Olá! Meu nome é <strong>Jhonata Cruz</strong>, tenho 16 anos. Focado no aprendizado de programação web, administração de sistemas e segurança da informação.</p>
-            <div class="btn-group">
-                <a href="#projetos" class="btn btn-primary">Ver Meus Projetos</a>
-                <a href="#certificados" class="btn btn-outline">Ver Certificados</a>
+        <section class="hero">
+            <div class="hero-text">
+                <span class="badge">⚡ Estudo Informática & Cibersegurança</span>
+                
+                <h1>
+                    <span>Hi,</span>
+                    <span id="im-anchor">I'm</span>
+                    <span>Cruz</span>
+                </h1>
+                
+                <h2 class="hero-subtitle">
+                    <span id="typed-subtitle"></span><span class="typing-cursor">|</span>
+                </h2>
+
+                <p>Olá! Meu nome é <strong>Jhonata Cruz</strong>, tenho 16 anos. Focado no aprendizado de programação web, administração de sistemas e segurança da informação.</p>
+                <div class="btn-group">
+                    <a href="#projetos" class="btn btn-primary">Ver Meus Projetos</a>
+                    <a href="#certificados" class="btn btn-outline">Ver Certificados</a>
+                </div>
+            </div>
+
+            <div class="hero-avatar">
+                <img src="svg/eu.jpg" alt="Foto de Jhonata Cruz">
             </div>
         </section>
 
@@ -442,7 +535,7 @@
                         <span class="tag">Security</span>
                     </div>
                     <div class="card-links">
-                        <a href="https://github.com" target="_blank">Ver Código no GitHub &rarr;</a>
+                        <a href="https://github.com/JhonataCruz/scan-python-basico.git" target="_blank">Ver Código no GitHub &rarr;</a>
                     </div>
                 </div>
 
@@ -462,7 +555,6 @@
             </div>
         </section>
 
-        <!-- Nova Seção de Certificados -->
         <section id="certificados">
             <h2 class="section-title">Certificações & Cursos</h2>
             <div class="certs-grid">
@@ -507,8 +599,8 @@
             <div class="card">
                 <p>Estou sempre aberto a aprender coisas novas e trocar conhecimentos sobre dev e cibersegurança!</p>
                 <div class="btn-group" style="margin-top: 24px;">
-                    <a href="https://github.com" target="_blank" class="btn btn-outline">GitHub</a>
-                    <a href="https://linkedin.com" target="_blank" class="btn btn-outline">LinkedIn</a>
+                    <a href="https://github.com/JhonataCruz" target="_blank" class="btn btn-outline">GitHub</a>
+                    <a href="https://www.instagram.com/jho_cruz_/" target="_blank" class="btn btn-outline">Instagram</a>
                 </div>
             </div>
         </section>
@@ -541,23 +633,38 @@
             }
         }
 
-        // Efeito de Digitação Automática (Typewriter) no H1
-        const fullTitleText = "Desenvolvendo soluções e explorando a segurança digital.";
-        const typedTextElement = document.getElementById("typed-text");
+        // Subtítulo Typewriter
+        const phrases = ["I am cybersecurity", "I am web developer"];
+        let phraseIndex = 0;
         let charIndex = 0;
+        let isDeleting = false;
+        const subtitleElement = document.getElementById("typed-subtitle");
 
-        function typeWriter() {
-            if (charIndex < fullTitleText.length) {
-                typedTextElement.textContent += fullTitleText.charAt(charIndex);
+        function typeLoop() {
+            const currentPhrase = phrases[phraseIndex];
+            if (isDeleting) {
+                subtitleElement.textContent = currentPhrase.substring(0, charIndex - 1);
+                charIndex--;
+            } else {
+                subtitleElement.textContent = currentPhrase.substring(0, charIndex + 1);
                 charIndex++;
-                setTimeout(typeWriter, 40); // Velocidade de digitação (ms)
             }
+
+            let typeSpeed = isDeleting ? 40 : 80;
+
+            if (!isDeleting && charIndex === currentPhrase.length) {
+                typeSpeed = 2000;
+                isDeleting = true;
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                phraseIndex = (phraseIndex + 1) % phrases.length;
+                typeSpeed = 500;
+            }
+
+            setTimeout(typeLoop, typeSpeed);
         }
 
-        // Inicia a digitação ao carregar a página
-        window.addEventListener('DOMContentLoaded', typeWriter);
-
-        // Barra de Progresso de Scroll
+        // Scroll Progress Bar
         window.addEventListener('scroll', () => {
             const winScroll = document.documentElement.scrollTop;
             const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
@@ -565,7 +672,7 @@
             document.getElementById('scroll-progress').style.width = scrolled + '%';
         });
 
-        // Efeito Tilt 3D interativo nos Cards
+        // Card 3D Tilt
         document.querySelectorAll('.card').forEach(card => {
             card.addEventListener('mousemove', e => {
                 const rect = card.getBoundingClientRect();
@@ -579,20 +686,21 @@
             });
         });
 
-        // Scroll Reveal
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, { threshold: 0.1 });
+        // --- VARIÁVEIS DE ANIMAÇÃO ---
+        let loadingState = 'SWIRL'; // 'SWIRL', 'MORPHING', 'MOVE_TO_HERO', 'DONE'
+        let swirlParticles = [];
+        let textTargets = [];
+        let swirlTimer = 0;
 
-        document.querySelectorAll('section').forEach(section => {
-            observer.observe(section);
-        });
+        let centerImPos = { x: 0, y: 0 };
+        let currentImPos = { x: 0, y: 0 };
+        let targetHeroPos = { x: 0, y: 0 };
+        
+        let centerFontSize = 64;
+        let currentFontSize = 64;
+        let targetFontSize = 64;
 
-        // Canvas p5.js + Matter.js
+        // Matter.js & Canvas
         let engine, world, mouseConstraint;
         let particles = [];
         let skills = [];
@@ -603,6 +711,28 @@
             canvas.style('position', 'fixed');
             canvas.style('top', '0');
             canvas.style('left', '0');
+
+            centerImPos = { x: width / 2, y: height / 2 };
+            currentImPos = { x: width / 2, y: height / 2 };
+
+            // Gera os pontos exatos do texto "I'm" para as partículas formarem as letras
+            generateTextPoints("I'm", centerImPos.x, centerImPos.y, centerFontSize);
+
+            // Cria 180 partículas para a espiral
+            for (let i = 0; i < 180; i++) {
+                let target = textTargets[i % textTargets.length];
+                swirlParticles.push({
+                    x: width / 2 + cos(random(TWO_PI)) * random(150, 350),
+                    y: height / 2 + sin(random(TWO_PI)) * random(150, 350),
+                    angle: random(TWO_PI),
+                    radius: random(180, 350),
+                    speed: random(0.04, 0.09),
+                    size: random(2.5, 4.5),
+                    targetX: target.x,
+                    targetY: target.y,
+                    color: lerpColor(color('#a855f7'), color('#6366f1'), random(1))
+                });
+            }
 
             engine = Matter.Engine.create({ gravity: { x: 0, y: 0 } });
             world = engine.world;
@@ -658,6 +788,33 @@
             });
         }
 
+        // Amostra de pontos do texto no p5 canvas
+        function generateTextPoints(txt, cx, cy, size) {
+            textTargets = [];
+            let pg = createGraphics(size * 3, size * 2);
+            pg.textFont('Plus Jakarta Sans');
+            pg.textStyle(BOLD);
+            pg.textSize(size);
+            pg.fill(255);
+            pg.textAlign(CENTER, CENTER);
+            pg.text(txt, pg.width / 2, pg.height / 2);
+
+            pg.loadPixels();
+            let step = 3;
+            for (let y = 0; y < pg.height; y += step) {
+                for (let x = 0; x < pg.width; x += step) {
+                    let index = (x + y * pg.width) * 4;
+                    if (pg.pixels[index + 3] > 128) {
+                        textTargets.push({
+                            x: cx + (x - pg.width / 2),
+                            y: cy + (y - pg.height / 2)
+                        });
+                    }
+                }
+            }
+            pg.remove();
+        }
+
         function draw() {
             let targetFactor = isLightMode ? 1 : 0;
             themeLerpFactor = lerp(themeLerpFactor, targetFactor, 0.05);
@@ -674,6 +831,12 @@
 
             Matter.Engine.update(engine, 1000 / 60);
 
+            if (loadingState !== 'DONE') {
+                drawLoadingSequence();
+                return;
+            }
+
+            // Canvas interativo pós-introdução
             const mousePos = createVector(mouseX, mouseY);
             const repelRadius = 160;
             const maxForce = 0.003;
@@ -739,6 +902,107 @@
                 text(skill.label, 0, 0);
                 pop();
             });
+        }
+
+        function drawGradientText(txt, x, y, size) {
+            push();
+            textFont('Plus Jakarta Sans');
+            textStyle(BOLD);
+            textSize(size);
+            textAlign(CENTER, CENTER);
+
+            let ctx = drawingContext;
+            let grad = ctx.createLinearGradient(x - size, y - size, x + size, y + size);
+            
+            if (isLightMode) {
+                grad.addColorStop(0, '#332c27');
+                grad.addColorStop(1, '#b47b48');
+            } else {
+                grad.addColorStop(0, '#ffffff');
+                grad.addColorStop(0.5, '#a855f7');
+                grad.addColorStop(1, '#6366f1');
+            }
+
+            ctx.fillStyle = grad;
+            text(txt, x, y);
+            pop();
+        }
+
+        // --- SEQUÊNCIA DE ANIMAÇÃO SEM TROCA BRUSCA ---
+        function drawLoadingSequence() {
+            swirlTimer++;
+
+            // FASE 1: Espiral em movimento
+            if (loadingState === 'SWIRL') {
+                noStroke();
+                swirlParticles.forEach(p => {
+                    p.angle += p.speed;
+                    p.radius = lerp(p.radius, 40, 0.015);
+
+                    p.x = width / 2 + cos(p.angle) * p.radius;
+                    p.y = height / 2 + sin(p.angle) * p.radius;
+
+                    fill(p.color);
+                    ellipse(p.x, p.y, p.size);
+                });
+
+                if (swirlTimer > 70) {
+                    loadingState = 'MORPHING';
+                }
+            }
+
+            // FASE 2: As partículas colapsam até formar exatamente a palavra "I'm"
+            if (loadingState === 'MORPHING') {
+                noStroke();
+                let arrivedCount = 0;
+
+                swirlParticles.forEach(p => {
+                    p.x = lerp(p.x, p.targetX, 0.12);
+                    p.y = lerp(p.y, p.targetY, 0.12);
+                    p.size = lerp(p.size, 3, 0.08);
+
+                    fill(p.color);
+                    ellipse(p.x, p.y, p.size);
+
+                    if (dist(p.x, p.y, p.targetX, p.targetY) < 2) {
+                        arrivedCount++;
+                    }
+                });
+
+                if (arrivedCount > swirlParticles.length * 0.85 || swirlTimer > 130) {
+                    loadingState = 'MOVE_TO_HERO';
+                }
+            }
+
+            // FASE 3: O "I'm" pronto viaja até se encaixar na posição final do site
+            if (loadingState === 'MOVE_TO_HERO') {
+                let anchor = document.getElementById('im-anchor');
+                let rect = anchor.getBoundingClientRect();
+                
+                let computedStyle = window.getComputedStyle(anchor);
+                targetFontSize = parseFloat(computedStyle.fontSize);
+                
+                targetHeroPos.x = rect.left + rect.width / 2;
+                targetHeroPos.y = rect.top + rect.height / 2;
+
+                currentImPos.x = lerp(currentImPos.x, targetHeroPos.x, 0.08);
+                currentImPos.y = lerp(currentImPos.y, targetHeroPos.y, 0.08);
+                currentFontSize = lerp(currentFontSize, targetFontSize, 0.08);
+
+                drawGradientText("I'm", currentImPos.x, currentImPos.y, currentFontSize);
+
+                // Quando o "I'm" encaixa perfeitamente:
+                if (dist(currentImPos.x, currentImPos.y, targetHeroPos.x, targetHeroPos.y) < 1.2) {
+                    loadingState = 'DONE';
+
+                    // Revela o site inteiro sincronizado
+                    document.body.classList.add('site-revealed');
+                    document.getElementById('themeToggleBtn').classList.add('visible');
+                    document.body.classList.remove('loading');
+                    
+                    typeLoop();
+                }
+            }
         }
 
         function windowResized() {
