@@ -277,16 +277,18 @@
         let scrollProgress = 0;
 
         function setup() {
-            // Em celulares, desativamos a animação inicial pesada para evitar
-            // que o conteúdo fique preso na tela de carregamento.
-            if (window.innerWidth <= 768) {
+            const isMobile = window.innerWidth <= 768;
+
+            // No mobile, pulamos somente a sequência de introdução.
+            // O canvas e as partículas continuam sendo criados normalmente.
+            if (isMobile) {
                 document.body.classList.add('site-revealed');
                 document.body.classList.remove('loading');
                 document.getElementById('themeToggleBtn').classList.add('visible');
+                loadingState = 'DONE';
 
                 // O typewriter continua funcionando normalmente.
                 setTimeout(typeLoop, 100);
-                return;
             }
 
             const canvas = createCanvas(windowWidth, windowHeight);
@@ -337,7 +339,9 @@
             ];
             Matter.World.add(world, walls);
 
-            for (let i = 0; i < 65; i++) {
+            const particleCount = isMobile ? 35 : 65;
+
+            for (let i = 0; i < particleCount; i++) {
                 const particle = Matter.Bodies.circle(
                     random(width * 0.1, width * 0.9),
                     random(height * 0.1, height * 0.9),
@@ -456,7 +460,10 @@
             let pColor = lerpColor(color(255, 255, 255, 160), color(120, 108, 98, 140), themeLerpFactor);
             fill(pColor);
             particles.forEach(p => {
-                ellipse(p.position.x, p.position.y, p.circleRadius * 2);
+                const particleSize = window.innerWidth <= 768
+                    ? p.circleRadius * 2.4
+                    : p.circleRadius * 2;
+                ellipse(p.position.x, p.position.y, particleSize);
             });
 
             let darkBlock = color('#a855f7');
@@ -609,6 +616,31 @@
 
         function windowResized() {
             resizeCanvas(windowWidth, windowHeight);
+
+            // Mantém as paredes do Matter.js alinhadas ao novo tamanho.
+            if (engine && world) {
+                const wallThickness = 100;
+                const walls = world.bodies.filter(body => body.isStatic);
+
+                if (walls.length >= 4) {
+                    Matter.Body.setPosition(walls[0], {
+                        x: -wallThickness / 2,
+                        y: height / 2
+                    });
+                    Matter.Body.setPosition(walls[1], {
+                        x: width + wallThickness / 2,
+                        y: height / 2
+                    });
+                    Matter.Body.setPosition(walls[2], {
+                        x: width / 2,
+                        y: -wallThickness / 2
+                    });
+                    Matter.Body.setPosition(walls[3], {
+                        x: width / 2,
+                        y: height + wallThickness / 2
+                    });
+                }
+            }
         }</script>
 </body>
 </html>
